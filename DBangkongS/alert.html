@@ -1,0 +1,316 @@
+<html>
+<head>
+<style>
+
+body{
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:none;
+}
+
+/* =============================
+   ALERT WRAPPER (3D EFFECT)
+============================= */
+
+.alert-wrapper{
+  position:relative;
+  display:inline-block;
+}
+
+/* ===== BACK CARD ===== */
+
+.alert-wrapper::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  transform:translate(10px,10px);
+  border-radius:16px;
+  background:#155f69;
+  border:2px solid rgba(255,255,255,.15);
+  z-index:0;
+  filter:brightness(.85);
+}
+
+/* ===== ALERT MAIN ===== */
+
+.alert{
+  position:relative;
+  z-index:1;
+
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  gap:1.2rem;
+
+  background:linear-gradient(135deg,#1f7a87,#2c94a3);
+
+  padding:1.2rem 1.6rem;
+  border-radius:16px;
+
+  border:2px solid rgba(255,255,255,.25);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.45);
+
+  animation:show .5s ease;
+}
+
+/* ===== SHINE ===== */
+
+.alert::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  left:-100%;
+  width:60%;
+  background:linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.25),
+    transparent
+  );
+  animation:shine 4s linear infinite;
+}
+
+@keyframes shine{
+  0%{left:-100%;}
+  100%{left:120%;}
+}
+
+/* =============================
+   FIRE PARTICLES
+============================= */
+
+.fire{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:2;
+}
+
+.spark{
+  position:absolute;
+  bottom:-10px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:radial-gradient(circle,#ffd400,#ff6a00,transparent);
+  animation:rise linear infinite;
+  opacity:.8;
+}
+
+@keyframes rise{
+  from{
+    transform:translateY(0) scale(1);
+    opacity:.9;
+  }
+  to{
+    transform:translateY(-140px) scale(.3);
+    opacity:0;
+  }
+}
+
+/* =============================
+   LOGO
+============================= */
+
+.logo img{
+  width:70px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));
+  animation:logoPop 1.6s ease-in-out infinite;
+}
+
+@keyframes logoPop{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-5px);}
+}
+
+/* =============================
+   TEXT
+============================= */
+
+.text{
+  display:flex;
+  flex-direction:column;
+}
+
+.message{
+  font-size:1.3rem;
+  color:#fff;
+}
+
+.amount{
+  margin-top:.3rem;
+  font-size:1.1rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+}
+
+.amount span.money{
+  color:#ffd400;
+  animation:moneyGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes moneyGlow{
+  from{ text-shadow:0 0 6px rgba(255,212,0,.5); }
+  to{
+    text-shadow:
+      0 0 14px rgba(255,212,0,1),
+      0 0 24px rgba(255,212,0,.8);
+  }
+}
+
+/* =============================
+   AVATAR & BADGES
+============================= */
+
+.avatar{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  object-fit:cover;
+  margin:0 6px;
+}
+
+img.avatar[src=""],
+img.avatar[src="#"],
+img.avatar:not([src]){
+  display:none;
+}
+
+.name{ color:#000; }
+
+.badge-icon{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+}
+
+#verified-badge-false{
+  display:none;
+}
+
+.sticker-icon{
+  width:28px;
+  height:28px;
+  vertical-align:middle;
+}
+
+/* =============================
+   SHOW ANIMATION
+============================= */
+
+@keyframes show{
+  from{
+    transform:translateY(25px) scale(.95);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="alert-wrapper">
+
+<div class="alert">
+
+<div class="fire" id="fire"></div>
+
+<div class="logo">
+<img src="https://raw.githubusercontent.com/himangmyid/mypicture/main/PRKxO2H.png">
+</div>
+
+<div class="text">
+
+<div class="message" id="message">
+{{message}}
+</div>
+
+<div class="amount">
+
+<span class="money">{{formattedAmount}}</span> dari
+
+<img class="avatar" src="{{gifterPicture}}">
+
+<span class="name">{{gifterName}}</span>
+
+<img id="verified-badge-{{isGifterVerified}}"
+src="https://assets.tako.id/badges/validated-user.png"
+class="badge-icon"/>
+
+<span id="badges"></span>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+
+window.addEventListener("load",function(){
+
+/* ===== FIRE ===== */
+
+const fire=document.getElementById("fire");
+
+if(fire){
+  for(let i=0;i<22;i++){
+    const spark=document.createElement("div");
+    spark.className="spark";
+    spark.style.left=Math.random()*100+"%";
+    spark.style.animationDuration=(2+Math.random()*2)+"s";
+    spark.style.animationDelay=Math.random()*2+"s";
+    fire.appendChild(spark);
+  }
+}
+
+/* ===== BADGES ===== */
+
+const badgesRaw="{{gifterBadges}}";
+const badgeContainer=document.getElementById("badges");
+
+if(badgesRaw && badgeContainer){
+  const badgeList=badgesRaw.split(",")
+  .map(b=>b.trim())
+  .filter(b=>b!=="");
+
+  badgeContainer.innerHTML=
+    badgeList.map(b=>
+      `<img src="https://assets.tako.id/badges/${b}.png" class="badge-icon">`
+    ).join(" ");
+}
+
+/* ===== STICKER ===== */
+
+const messageDiv=document.getElementById("message");
+
+if(messageDiv){
+  let content=messageDiv.innerHTML;
+
+  content=content.replace(
+    /\[([a-zA-Z0-9_]+)\]/g,
+    (_,name)=>{
+      const url=`https://assets.tako.id/stickers/${name}.png`;
+      return `<img src="${url}" class="sticker-icon">`;
+    }
+  );
+
+  messageDiv.innerHTML=content;
+}
+
+});
+
+</script>
+
+</body>
+</html>
