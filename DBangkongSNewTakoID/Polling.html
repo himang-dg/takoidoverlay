@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* TOP LINE GRADIENT */
+        .polling::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #22d3ee, #60a5fa, transparent);
+        }
+
+        /* CARD SHADOW */
+        .polling {
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(34, 211, 238, 0.12);
+        }
+
+        /* CYBER SHINE SWEEP */
+        .polling::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(34, 211, 238, 0.28), transparent);
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* PARTICLES */
+        .spark {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: translateY(-140px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 130%;
+            }
+        }
+
+        /* POLL OPTION BAR */
+        .poll-bar {
+            position: relative;
+            height: 2rem;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .poll-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #0891b2, #22d3ee);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
+            transition: width 0.6s ease;
+        }
+
+        .poll-bar-name {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 0.6rem;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* MONEY GLOW */
+        .money-glow {
+            color: #facc15;
+            animation: moneyGlow 1.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes moneyGlow {
+            from {
+                text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+            }
+
+            to {
+                text-shadow:
+                    0 0 12px rgba(250, 204, 21, 1),
+                    0 0 22px rgba(250, 204, 21, 0.7);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="polling relative overflow-hidden rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg px-5 py-4">
+        <!-- PARTICLES -->
+        <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+
+        <!-- HEADER: TITLE + END TIME -->
+        <div class="relative z-10 flex items-center justify-between mb-3">
+            <div id="poll-title" class="text-white text-[1.15rem] font-bold tracking-wide">{{title}}</div>
+            <div id="poll-end" class="text-cyan-300/50 text-xs italic shrink-0 ml-3">Berakhir Pada {{endTime}}</div>
+        </div>
+
+        <!-- POLL OPTIONS -->
+        <div id="poll-list" class="relative z-10 flex flex-col gap-2"></div>
+
+        <!-- TOTAL -->
+        <div id="poll-total" class="relative z-10 text-center mt-3 text-sm text-slate-400"></div>
+    </div>
+
+    <script id="poll-data" type="application/json">{{pollingOptions}}</script>
+    <script>
+        window.addEventListener("load", () => {
+            /* ── PARTICLES ── */
+            const fire = document.getElementById("fire");
+            for (let i = 0; i < 14; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = Math.random() * 100 + "%";
+                spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+                spark.style.animationDelay = Math.random() * 2 + "s";
+                fire.appendChild(spark);
+            }
+
+            /* ── TITLE FALLBACK ── */
+            const titleEl = document.getElementById("poll-title");
+            const titleText = (titleEl.textContent || "").trim();
+            if (!titleText || titleText.includes("{{")) {
+                titleEl.textContent = "Polling";
+            }
+
+            /* ── END TIME FALLBACK ── */
+            const endEl = document.getElementById("poll-end");
+            const endText = (endEl.textContent || "").trim();
+            if (endText.includes("{{")) {
+                endEl.style.display = "none";
+            }
+
+            /* ── POLL OPTIONS ── */
+            const options = JSON.parse(document.getElementById("poll-data").textContent);
+            const list = document.getElementById("poll-list");
+
+            /* Calculate total for percentage */
+            let totalAmount = 0;
+            options.forEach((o) => { totalAmount += o.totalAmount; });
+
+            options.forEach((o) => {
+                const wrapper = document.createElement("div");
+
+                /* BAR ROW: bar + amount */
+                const barRow = document.createElement("div");
+                barRow.className = "flex items-center gap-3";
+
+                /* BAR with name inside */
+                const bar = document.createElement("div");
+                bar.className = "poll-bar flex-1";
+
+                const fill = document.createElement("div");
+                fill.className = "poll-bar-fill";
+                const pct = totalAmount > 0 ? Math.round((o.totalAmount / totalAmount) * 100) : 0;
+                fill.style.width = pct + "%";
+
+                const nameLabel = document.createElement("div");
+                nameLabel.className = "poll-bar-name";
+                nameLabel.textContent = o.name;
+
+                bar.appendChild(fill);
+                bar.appendChild(nameLabel);
+
+                /* AMOUNT + PERCENTAGE */
+                const amountWrap = document.createElement("span");
+                amountWrap.className = "money-glow font-bold text-[0.85rem] shrink-0 whitespace-nowrap";
+                amountWrap.textContent = o.formattedTotalAmount + "  " + pct + "%";
+
+                barRow.appendChild(bar);
+                barRow.appendChild(amountWrap);
+
+                /* VOTERS (if provided by Tako) */
+                if (o.voters && o.voters.length > 0) {
+                    const voterDiv = document.createElement("div");
+                    voterDiv.className = "text-xs text-cyan-400/40 mt-0.5 pl-1 truncate";
+                    voterDiv.textContent = o.voters.join(", ");
+                    wrapper.appendChild(barRow);
+                    wrapper.appendChild(voterDiv);
+                } else {
+                    wrapper.appendChild(barRow);
+                }
+
+                list.appendChild(wrapper);
+            });
+
+            /* ── TOTAL ── */
+            const totalEl = document.getElementById("poll-total");
+            if (totalAmount > 0) {
+                const formatted = "IDR " + totalAmount.toLocaleString("id-ID");
+                totalEl.innerHTML = 'Total: <span class="money-glow font-bold">' + formatted + '</span>';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="preconnect" href="https://assets.tako.id">
+    <link rel="dns-prefetch" href="//assets.tako.id">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* TOP LINE GRADIENT */
+        .leaderboard::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    #22d3ee,
+                    #60a5fa,
+                    transparent);
+        }
+
+        /* CARD SHADOW */
+        .leaderboard {
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(34, 211, 238, 0.12);
+        }
+
+        /* CYBER SHINE SWEEP */
+        .leaderboard::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(34, 211, 238, 0.28),
+                    transparent);
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* LOGO FLOAT */
+        .logo-float {
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-3px) rotate(-2deg);
+            }
+
+            75% {
+                transform: translateY(-3px) rotate(2deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        /* MONEY GLOW */
+        .money-glow {
+            color: #facc15;
+            animation: moneyGlow 1.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes moneyGlow {
+            from {
+                text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+            }
+
+            to {
+                text-shadow:
+                    0 0 12px rgba(250, 204, 21, 1),
+                    0 0 22px rgba(250, 204, 21, 0.7);
+            }
+        }
+
+        /* CYBER PARTICLES */
+        .spark {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: translateY(-140px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        /* SHINE */
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 130%;
+            }
+        }
+
+        /* RANK ROW */
+        .rank-row {
+            border-bottom: 1px solid rgba(34, 211, 238, 0.08);
+            transition: background 0.2s;
+        }
+
+        .rank-row:last-child {
+            border-bottom: none;
+        }
+
+        .rank-row:hover {
+            background: rgba(34, 211, 238, 0.06);
+        }
+
+        /* RANK NUMBER PODIUM */
+        .rank-num {
+            font-weight: 800;
+            font-size: 1.1rem;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .rank-num.gold {
+            color: #facc15;
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+        }
+
+        .rank-num.silver {
+            color: #94a3b8;
+            text-shadow: 0 0 8px rgba(148, 163, 184, 0.4);
+        }
+
+        .rank-num.bronze {
+            color: #fb923c;
+            text-shadow: 0 0 8px rgba(251, 146, 60, 0.4);
+        }
+
+        .rank-num.normal {
+            color: #67e8f9;
+        }
+
+        /* AVATAR */
+        .rank-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            object-fit: cover;
+            border: 1.5px solid rgba(34, 211, 238, 0.4);
+            flex-shrink: 0;
+        }
+
+        /* BADGES */
+        .rank-badge-icon {
+            height: 1rem;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .rank-badge-tag {
+            font-size: 0.65rem;
+            border: 1px solid rgba(34, 211, 238, 0.35);
+            color: #67e8f9;
+            padding: 0.05rem 0.35rem;
+            border-radius: 4px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* CANVAS DECOR */
+        .lb-wrapper>img {
+            filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.25)) drop-shadow(0 0 25px rgba(59, 130, 246, 0.15));
+            animation: decorFloat 4s ease-in-out infinite;
+        }
+
+        .lb-wrapper>img:last-of-type {
+            animation-delay: 2s;
+        }
+
+        @keyframes decorFloat {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lb-wrapper relative inline-block w-[97%] pr-3 pb-6">
+        <!-- DECOR TOP LEFT -->
+        <img src="https://cdn.jsdelivr.net/gh/himangmyid/mypicture@main/bkbak.png" alt=""
+            class="pointer-events-none absolute -top-2 -left-2 w-[150px] z-20 select-none" />
+
+
+
+        <div
+            class="leaderboard relative overflow-hidden rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg z-10 pl-20 pr-6 py-5">
+            <!-- PARTICLES -->
+            <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+
+            <!-- HEADER -->
+            <div class="relative z-10 text-center mb-3">
+                <div id="lb-title" class="text-white text-[1.3rem] font-bold tracking-wide leading-tight">
+                    {{title}}
+                </div>
+                <div class="text-cyan-300/60 text-sm mt-0.5">Leaderboard</div>
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="relative z-10 h-px mb-3"
+                style="background: linear-gradient(90deg, transparent, #22d3ee55, #60a5fa44, transparent)"></div>
+
+            <!-- RANKING LIST -->
+            <div id="lb-list" class="relative z-10"></div>
+        </div>
+    </div>
+
+    <script id="rankings-data" type="application/json">{{rankings}}</script>
+    <script>
+        window.addEventListener("load", () => {
+            /* ── BADGE ICON MAP ── */
+            const BADGE_ICON_URLS = {
+                "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
+                "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
+                "Rich Rich Club": "https://tako.id/images/badges/king.png",
+                "Charity": "https://tako.id/images/badges/charity.png",
+                "VTuber": "https://tako.id/images/badges/vtuber.png",
+                "Tako Team": "https://tako.id/images/badges/admin.png"
+            };
+
+            /* ── PARTICLES ── */
+            const fire = document.getElementById("fire");
+            for (let i = 0; i < 18; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = Math.random() * 100 + "%";
+                spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+                spark.style.animationDelay = Math.random() * 2 + "s";
+                fire.appendChild(spark);
+            }
+
+            /* ── TITLE ── */
+            const titleEl = document.getElementById("lb-title");
+            const titleText = (titleEl.textContent || "").trim();
+            if (!titleText || titleText.includes("{{")) {
+                titleEl.textContent = "Leaderboard";
+            }
+
+            /* ── RANKINGS ── */
+            const rankings = JSON.parse(document.getElementById("rankings-data").textContent);
+            const list = document.getElementById("lb-list");
+
+            rankings.forEach((r, i) => {
+                const row = document.createElement("div");
+                row.className = "rank-row flex items-center gap-2 py-1 px-2 rounded-lg";
+
+                /* NUMBER */
+                const num = document.createElement("span");
+                num.className = "rank-num";
+                const pos = i + 1;
+                num.textContent = "#" + pos;
+                if (pos === 1) num.classList.add("gold");
+                else if (pos === 2) num.classList.add("silver");
+                else if (pos === 3) num.classList.add("bronze");
+                else num.classList.add("normal");
+
+                /* AVATAR */
+                const pic = (r.picture || "").trim();
+                let avatarEl = null;
+                if (pic) {
+                    avatarEl = document.createElement("img");
+                    avatarEl.className = "rank-avatar";
+                    avatarEl.src = pic;
+                    avatarEl.alt = "";
+                    avatarEl.onerror = () => { avatarEl.style.display = "none"; };
+                }
+
+                /* NAME */
+                const name = document.createElement("span");
+                name.className = "flex-1 min-w-0 text-white font-semibold text-[1rem] truncate";
+                name.textContent = r.name;
+
+                /* BADGES */
+                const badges = document.createElement("div");
+                badges.className = "flex items-center gap-1 shrink-0";
+                (r.badges || "").split(",").filter(Boolean).forEach((badgeName) => {
+                    const iconUrl = BADGE_ICON_URLS[badgeName];
+                    if (iconUrl) {
+                        const icon = document.createElement("img");
+                        icon.className = "rank-badge-icon";
+                        icon.src = iconUrl;
+                        icon.alt = badgeName;
+                        icon.title = badgeName;
+                        icon.onerror = () => {
+                            const tag = document.createElement("span");
+                            tag.className = "rank-badge-tag";
+                            tag.textContent = badgeName;
+                            icon.replaceWith(tag);
+                        };
+                        badges.appendChild(icon);
+                    } else {
+                        const tag = document.createElement("span");
+                        tag.className = "rank-badge-tag";
+                        tag.textContent = badgeName;
+                        badges.appendChild(tag);
+                    }
+                });
+
+                /* AMOUNT */
+                const amount = document.createElement("span");
+                amount.className = "money-glow font-bold text-[1rem] shrink-0";
+                amount.textContent = r.formattedAmount;
+
+                /* ASSEMBLE */
+                row.appendChild(num);
+                if (avatarEl) row.appendChild(avatarEl);
+                row.appendChild(name);
+                if (badges.children.length > 0) row.appendChild(badges);
+                row.appendChild(amount);
+                list.appendChild(row);
+            });
+        });
+    </script>
+</body>
+
+</html>

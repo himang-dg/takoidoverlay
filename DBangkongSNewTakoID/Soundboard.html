@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* TOP LINE GRADIENT */
+        .soundboard::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #22d3ee, #60a5fa, transparent);
+        }
+
+        /* CARD SHADOW */
+        .soundboard {
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(34, 211, 238, 0.12);
+        }
+
+        /* CYBER SHINE SWEEP */
+        .soundboard::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(34, 211, 238, 0.28), transparent);
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* PARTICLES */
+        .spark {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+            animation: rise linear infinite;
+        }
+
+        .sb-badge-icon {
+            height: 1rem;
+            width: auto;
+        }
+
+        .sb-badge-tag {
+            font-size: 0.65rem;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            color: #67e8f9;
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: translateY(-100px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 130%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="soundboard relative overflow-hidden rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg px-6 py-5">
+        <!-- PARTICLES -->
+        <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+
+        <!-- CONTENT (CENTER) -->
+        <div class="relative z-10 flex flex-col items-center text-center gap-1">
+            <svg class="w-10 h-10" fill="#94a3b8" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 364.59 364.591">
+                <path
+                    d="M360.655,258.05V25c0-13.807-11.191-25-25-25H130.09c-13.807,0-25,11.193-25,25v206.27 c-10.569-3.184-22.145-4.271-34.058-2.768C29.527,233.738-0.293,268.3,4.427,305.695c4.719,37.396,42.189,63.464,83.694,58.226 c40.015-5.049,66.969-37.146,66.969-73.181V50h155.564v146.794c-10.591-3.2-22.19-4.297-34.134-2.79 c-41.504,5.237-71.323,39.798-66.604,77.193s42.188,63.464,83.694,58.227C332.951,324.458,360.655,293.275,360.655,258.05z">
+                </path>
+            </svg>
+            <div id="sound-name" class="text-white font-bold text-[1.2rem]">{{soundName}}</div>
+            <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                <span class="text-slate-400 text-sm">Dikirim oleh</span>
+                <span id="gifter-name" class="text-white font-semibold text-sm">{{gifterName}}</span>
+                <span id="verified-badge" class="text-cyan-400 text-xs" style="display:none">✓</span>
+                <span id="badges" class="flex items-center gap-1"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("load", () => {
+            /* ── PARTICLES ── */
+            const fire = document.getElementById("fire");
+            for (let i = 0; i < 10; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = Math.random() * 100 + "%";
+                spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+                spark.style.animationDelay = Math.random() * 2 + "s";
+                fire.appendChild(spark);
+            }
+
+            /* ── BADGE ICON MAP ── */
+            const BADGE_ICON_URLS = {
+                "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
+                "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
+                "Rich Rich Club": "https://tako.id/images/badges/king.png",
+                "Charity": "https://tako.id/images/badges/charity.png",
+                "VTuber": "https://tako.id/images/badges/vtuber.png",
+                "Tako Team": "https://tako.id/images/badges/admin.png"
+            };
+
+            /* ── VERIFIED ── */
+            const isVerified = "{{isGifterVerified}}" === "true";
+            if (isVerified) {
+                document.getElementById("verified-badge").style.display = "inline";
+            }
+
+            /* ── BADGES ── */
+            const badgesRaw = "{{gifterBadges}}".trim();
+            const badgesEl = document.getElementById("badges");
+            if (badgesRaw && !badgesRaw.includes("{{")) {
+                badgesRaw.split(",").filter(Boolean).forEach((name) => {
+                    const iconUrl = BADGE_ICON_URLS[name];
+                    if (iconUrl) {
+                        const icon = document.createElement("img");
+                        icon.className = "sb-badge-icon";
+                        icon.src = iconUrl;
+                        icon.alt = name;
+                        icon.title = name;
+                        icon.onerror = () => {
+                            const tag = document.createElement("span");
+                            tag.className = "sb-badge-tag";
+                            tag.textContent = name;
+                            icon.replaceWith(tag);
+                        };
+                        badgesEl.appendChild(icon);
+                    } else {
+                        const tag = document.createElement("span");
+                        tag.className = "sb-badge-tag";
+                        tag.textContent = name;
+                        badgesEl.appendChild(tag);
+                    }
+                });
+            }
+
+            /* ── SOUND NAME FALLBACK ── */
+            const soundEl = document.getElementById("sound-name");
+            const soundText = (soundEl.textContent || "").trim();
+            if (!soundText || soundText.includes("{{")) {
+                soundEl.textContent = "Sound Effect";
+            }
+        });
+    </script>
+</body>
+
+</html>

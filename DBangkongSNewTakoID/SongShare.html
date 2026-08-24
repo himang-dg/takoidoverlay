@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* TOP LINE GRADIENT */
+        .songshare::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #22d3ee, #60a5fa, transparent);
+        }
+
+        /* CARD SHADOW */
+        .songshare {
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(34, 211, 238, 0.12);
+        }
+
+        /* CYBER SHINE SWEEP */
+        .songshare::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(34, 211, 238, 0.28), transparent);
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* PARTICLES */
+        .spark {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: translateY(-140px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 130%;
+            }
+        }
+
+        /* COVER ART */
+        .cover-box {
+            width: 3.6rem;
+            height: 3.6rem;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cover-box img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* PROGRESS BAR */
+        .bar-bg {
+            height: 0.3rem;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0891b2, #22d3ee, #60a5fa);
+            box-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+        }
+
+        /* QUEUE ITEM */
+        .queue-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            border-radius: 10px;
+            padding: 0.5rem 0.7rem;
+        }
+
+        .queue-num {
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 6px;
+            background: rgba(34, 211, 238, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #22d3ee;
+            flex-shrink: 0;
+        }
+
+        /* BADGE */
+        .ss-badge-icon {
+            height: 0.9375rem;
+            width: auto;
+        }
+
+        .ss-badge-tag {
+            font-size: 0.6rem;
+            background: rgba(239, 68, 68, 0.8);
+            color: #fff;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="songshare relative overflow-hidden rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg px-5 py-4">
+        <!-- PARTICLES -->
+        <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+
+        <!-- ERROR -->
+        <div id="error-banner" class="relative z-10 text-sm bg-red-900/40 text-red-300 px-3 py-1.5 rounded mb-2"
+            style="display:none"></div>
+
+        <!-- GAP BANNER -->
+        <div id="gap-banner" class="relative z-10 text-slate-400 text-sm py-2" style="display:none"></div>
+
+        <!-- NOW PLAYING -->
+        <div id="player-body" class="relative z-10">
+            <!-- TOP ROW: cover + info + time -->
+            <div class="flex gap-3 items-center">
+                <!-- COVER -->
+                <div class="cover-box" id="cover">
+                    <svg class="w-7 h-7" id="cover-fallback" fill="#475569" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 364.59 364.591">
+                        <path
+                            d="M360.655,258.05V25c0-13.807-11.191-25-25-25H130.09c-13.807,0-25,11.193-25,25v206.27 c-10.569-3.184-22.145-4.271-34.058-2.768C29.527,233.738-0.293,268.3,4.427,305.695c4.719,37.396,42.189,63.464,83.694,58.226 c40.015-5.049,66.969-37.146,66.969-73.181V50h155.564v146.794c-10.591-3.2-22.19-4.297-34.134-2.79 c-41.504,5.237-71.323,39.798-66.604,77.193s42.188,63.464,83.694,58.227C332.951,324.458,360.655,293.275,360.655,258.05z">
+                        </path>
+                    </svg>
+                    <img id="cover-img" alt="" style="display:none">
+                </div>
+
+                <!-- INFO -->
+                <div class="flex-1 min-w-0">
+                    <div id="title-el" class="text-white font-bold text-[1rem] truncate">{{songTitle}}</div>
+                    <div id="artist-el" class="text-slate-300 text-sm truncate">{{songArtist}}</div>
+                    <div id="requester-row" class="text-xs text-slate-400 mt-0.5 flex items-center gap-1 flex-wrap">
+                        <span>Di request oleh</span>
+                        <span id="requester-name" class="text-white font-medium">{{requesterName}}</span>
+                        <span id="requester-verified" class="text-cyan-400"></span>
+                        <span id="requester-badges" class="flex items-center gap-1"></span>
+                    </div>
+                </div>
+
+                <!-- TIME -->
+                <div id="time-el" class="text-sm text-slate-300 shrink-0">{{formattedElapsed}} / {{formattedDuration}}
+                </div>
+            </div>
+
+            <!-- PROGRESS BAR (full width) -->
+            <div id="progress-row" class="mt-2">
+                <div class="bar-bg">
+                    <div class="bar-fill" id="bar-fill" style="width: {{progressPercent}}%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUEUE -->
+        <div id="queue-wrap" class="relative z-10" style="display:none">
+            <!-- First queue item -->
+            <div id="queue-first" class="queue-card flex items-center gap-3 mt-3"></div>
+            <!-- More count -->
+            <div id="queue-more" class="text-center text-xs text-slate-400 mt-2" style="display:none"></div>
+        </div>
+    </div>
+
+    <script id="queue-data" type="application/json">{{queue}}</script>
+    <script>
+        window.addEventListener("load", () => {
+            /* ── PARTICLES ── */
+            const fire = document.getElementById("fire");
+            for (let i = 0; i < 14; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = Math.random() * 100 + "%";
+                spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+                spark.style.animationDelay = Math.random() * 2 + "s";
+                fire.appendChild(spark);
+            }
+
+            /* ── BADGE MAP ── */
+            const BADGE_ICON_URLS = {
+                "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
+                "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
+                "Rich Rich Club": "https://tako.id/images/badges/king.png",
+                "Charity": "https://tako.id/images/badges/charity.png",
+                "VTuber": "https://tako.id/images/badges/vtuber.png",
+                "Tako Team": "https://tako.id/images/badges/admin.png"
+            };
+
+            /* ── STATE VARS ── */
+            const isPlaying = "{{isPlaying}}" === "true";
+            const isPaused = "{{isPaused}}" === "true";
+            const isInGap = "{{isInGap}}" === "true";
+            const gapText = "{{gapText}}";
+            const errorText = "{{error}}";
+            const coverUrl = "{{songCoverArtUrl}}".trim();
+            const requesterPicture = "{{requesterPicture}}".trim();
+            const requesterBadgesRaw = "{{requesterBadges}}".trim();
+            const isRequesterVerified = "{{isRequesterVerified}}" === "true";
+
+            const titleEl = document.getElementById("title-el");
+            const artistEl = document.getElementById("artist-el");
+            const coverImg = document.getElementById("cover-img");
+            const coverFallback = document.getElementById("cover-fallback");
+            const errorBanner = document.getElementById("error-banner");
+            const gapBanner = document.getElementById("gap-banner");
+            const playerBody = document.getElementById("player-body");
+            const requesterRow = document.getElementById("requester-row");
+            const requesterVerified = document.getElementById("requester-verified");
+            const requesterBadgesEl = document.getElementById("requester-badges");
+            const progressRow = document.getElementById("progress-row");
+
+            const titleText = titleEl.textContent.trim();
+            const isIdle = !titleText || titleText === "{{" + "songTitle" + "}}";
+
+            /* ── ERROR ── */
+            if (errorText && !errorText.includes("{{")) {
+                errorBanner.textContent = "⚠ " + errorText;
+                errorBanner.style.display = "block";
+            }
+
+            /* ── STATE ── */
+            if (isInGap) {
+                playerBody.style.display = "none";
+                gapBanner.textContent = gapText || "Menyiapkan lagu berikutnya...";
+                gapBanner.style.display = "block";
+            } else if (isIdle) {
+                titleEl.textContent = "Belum ada lagu diputar";
+                titleEl.classList.replace("text-white", "text-slate-500");
+                titleEl.classList.remove("font-bold");
+                artistEl.textContent = "Kirim hadiah untuk request lagu";
+                requesterRow.style.display = "none";
+                progressRow.style.display = "none";
+            } else {
+                /* COVER */
+                if (coverUrl && !coverUrl.includes("{{")) {
+                    coverImg.src = coverUrl;
+                    coverImg.style.display = "block";
+                    coverFallback.style.display = "none";
+                    coverImg.onerror = () => {
+                        coverImg.style.display = "none";
+                        coverFallback.style.display = "flex";
+                    };
+                }
+
+                /* VERIFIED */
+                if (isRequesterVerified) requesterVerified.textContent = "✓";
+
+                /* BADGES */
+                if (requesterBadgesRaw && !requesterBadgesRaw.includes("{{")) {
+                    requesterBadgesRaw.split(",").filter(Boolean).forEach((name) => {
+                        const iconUrl = BADGE_ICON_URLS[name];
+                        if (iconUrl) {
+                            const icon = document.createElement("img");
+                            icon.className = "ss-badge-icon";
+                            icon.src = iconUrl;
+                            icon.alt = name;
+                            icon.title = name;
+                            icon.onerror = () => {
+                                const tag = document.createElement("span");
+                                tag.className = "ss-badge-tag";
+                                tag.textContent = name;
+                                icon.replaceWith(tag);
+                            };
+                            requesterBadgesEl.appendChild(icon);
+                        } else {
+                            const tag = document.createElement("span");
+                            tag.className = "ss-badge-tag";
+                            tag.textContent = name;
+                            requesterBadgesEl.appendChild(tag);
+                        }
+                    });
+                }
+            }
+
+            /* ── QUEUE ── */
+            try {
+                const queueData = JSON.parse(document.getElementById("queue-data").textContent);
+
+                if (Array.isArray(queueData) && queueData.length > 0) {
+                    const queueWrap = document.getElementById("queue-wrap");
+                    queueWrap.style.display = "block";
+                    const first = queueData[0];
+                    const queueFirst = document.getElementById("queue-first");
+
+                    /* Number */
+                    const num = document.createElement("div");
+                    num.className = "queue-num";
+                    num.textContent = "1";
+
+                    /* Info */
+                    const info = document.createElement("div");
+                    info.className = "flex-1 min-w-0";
+
+                    const songTitle = document.createElement("div");
+                    songTitle.className = "text-white font-semibold text-sm truncate";
+                    songTitle.textContent = first.title;
+
+                    const songMeta = document.createElement("div");
+                    songMeta.className = "text-slate-400 text-xs truncate";
+                    songMeta.textContent = first.artist + " · " + (first.senderName || "");
+
+                    info.appendChild(songTitle);
+                    info.appendChild(songMeta);
+
+                    /* Badges */
+                    const badgesWrap = document.createElement("div");
+                    badgesWrap.className = "flex items-center gap-1 shrink-0";
+                    (first.senderBadgeItems || []).forEach((badge) => {
+                        if (!badge.url) return;
+                        const icon = document.createElement("img");
+                        icon.className = "ss-badge-icon";
+                        icon.src = badge.url;
+                        icon.alt = badge.title || "";
+                        icon.title = badge.title || "";
+                        badgesWrap.appendChild(icon);
+                    });
+
+                    /* Duration */
+                    const dur = document.createElement("span");
+                    dur.className = "text-slate-300 text-sm shrink-0";
+                    dur.textContent = first.formattedDuration;
+
+                    queueFirst.appendChild(num);
+                    queueFirst.appendChild(info);
+                    queueFirst.appendChild(badgesWrap);
+                    queueFirst.appendChild(dur);
+
+                    /* More count */
+                    if (queueData.length > 1) {
+                        const moreEl = document.getElementById("queue-more");
+                        moreEl.style.display = "block";
+                        moreEl.textContent = "+" + (queueData.length - 1) + " lagu lainnya dalam antrian";
+                    }
+                }
+            } catch (e) { }
+        });
+    </script>
+</body>
+
+</html>

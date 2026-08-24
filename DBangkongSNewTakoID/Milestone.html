@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* TOP LINE GRADIENT */
+        .milestone::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #22d3ee, #60a5fa, transparent);
+        }
+
+        /* CARD SHADOW */
+        .milestone {
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(34, 211, 238, 0.12);
+        }
+
+        /* CYBER SHINE SWEEP */
+        .milestone::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(34, 211, 238, 0.28), transparent);
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* CYBER PARTICLES */
+        .spark {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: translateY(-140px) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes shine {
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 130%;
+            }
+        }
+
+        /* PROGRESS BAR */
+        .bar-bg {
+            height: 0.65rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #0891b2, #22d3ee, #60a5fa);
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5), 0 0 20px rgba(34, 211, 238, 0.2);
+            transition: width 0.6s ease;
+        }
+
+        /* MONEY GLOW */
+        .money-glow {
+            color: #facc15;
+            animation: moneyGlow 1.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes moneyGlow {
+            from {
+                text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+            }
+
+            to {
+                text-shadow:
+                    0 0 12px rgba(250, 204, 21, 1),
+                    0 0 22px rgba(250, 204, 21, 0.7);
+            }
+        }
+
+        /* PERCENTAGE GLOW */
+        .pct-glow {
+            color: #22d3ee;
+            animation: pctGlow 1.4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pctGlow {
+            from {
+                text-shadow: 0 0 6px rgba(34, 211, 238, 0.3);
+            }
+
+            to {
+                text-shadow: 0 0 14px rgba(34, 211, 238, 0.8);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="milestone relative overflow-hidden rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg px-6 py-4">
+        <!-- PARTICLES -->
+        <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+
+        <!-- TITLE (CENTER) -->
+        <div id="ms-title" class="relative z-10 text-white text-[1.15rem] font-bold tracking-wide text-center mb-2.5">{{title}}</div>
+
+        <!-- PROGRESS BAR -->
+        <div class="relative z-10 bar-bg">
+            <div class="bar-fill" id="bar-fill" style="width: {{percentage}}%"></div>
+        </div>
+
+        <!-- AMOUNTS -->
+        <div class="relative z-10 flex items-center justify-center gap-1.5 mt-2 text-[0.9rem]">
+            <span class="money-glow font-bold">{{formattedStepProgress}}</span>
+            <span class="text-slate-500">/</span>
+            <span class="text-slate-300 font-semibold">{{formattedStepTarget}}</span>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("load", () => {
+            /* ── PARTICLES ── */
+            const fire = document.getElementById("fire");
+            for (let i = 0; i < 14; i++) {
+                const spark = document.createElement("div");
+                spark.className = "spark";
+                spark.style.left = Math.random() * 100 + "%";
+                spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+                spark.style.animationDelay = Math.random() * 2 + "s";
+                fire.appendChild(spark);
+            }
+
+            /* ── TITLE FALLBACK ── */
+            const titleEl = document.getElementById("ms-title");
+            const titleText = (titleEl.textContent || "").trim();
+            if (!titleText || titleText.includes("{{")) {
+                titleEl.textContent = "Milestone";
+            }
+
+
+            /* ── CLAMP PERCENTAGE BAR ── */
+            const barFill = document.getElementById("bar-fill");
+            const widthVal = parseFloat(barFill.style.width);
+            if (isNaN(widthVal)) {
+                barFill.style.width = "0%";
+            } else {
+                barFill.style.width = Math.min(widthVal, 100) + "%";
+            }
+        });
+    </script>
+</body>
+
+</html>
