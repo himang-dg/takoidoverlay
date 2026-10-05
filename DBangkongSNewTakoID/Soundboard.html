@@ -109,14 +109,13 @@
             <div class="flex items-center justify-center gap-1.5 flex-wrap">
                 <span class="text-slate-400 text-sm">Dikirim oleh</span>
                 <span id="gifter-name" class="text-white font-semibold text-sm">{{gifterName}}</span>
-                <span id="verified-badge" class="text-cyan-400 text-xs" style="display:none">✓</span>
                 <span id="badges" class="flex items-center gap-1"></span>
             </div>
         </div>
     </div>
 
     <script>
-        window.addEventListener("load", () => {
+        document.addEventListener("DOMContentLoaded", () => {
             /* ── PARTICLES ── */
             const fire = document.getElementById("fire");
             for (let i = 0; i < 10; i++) {
@@ -128,47 +127,16 @@
                 fire.appendChild(spark);
             }
 
-            /* ── BADGE ICON MAP ── */
-            const BADGE_ICON_URLS = {
-                "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
-                "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
-                "Rich Rich Club": "https://tako.id/images/badges/king.png",
-                "Charity": "https://tako.id/images/badges/charity.png",
-                "VTuber": "https://tako.id/images/badges/vtuber.png",
-                "Tako Team": "https://tako.id/images/badges/admin.png"
-            };
-
-            /* ── VERIFIED ── */
-            const isVerified = "{{isGifterVerified}}" === "true";
-            if (isVerified) {
-                document.getElementById("verified-badge").style.display = "inline";
-            }
-
             /* ── BADGES ── */
             const badgesRaw = "{{gifterBadges}}".trim();
             const badgesEl = document.getElementById("badges");
             if (badgesRaw && !badgesRaw.includes("{{")) {
-                badgesRaw.split(",").filter(Boolean).forEach((name) => {
-                    const iconUrl = BADGE_ICON_URLS[name];
-                    if (iconUrl) {
-                        const icon = document.createElement("img");
-                        icon.className = "sb-badge-icon";
-                        icon.src = iconUrl;
-                        icon.alt = name;
-                        icon.title = name;
-                        icon.onerror = () => {
-                            const tag = document.createElement("span");
-                            tag.className = "sb-badge-tag";
-                            tag.textContent = name;
-                            icon.replaceWith(tag);
-                        };
-                        badgesEl.appendChild(icon);
-                    } else {
-                        const tag = document.createElement("span");
-                        tag.className = "sb-badge-tag";
-                        tag.textContent = name;
-                        badgesEl.appendChild(tag);
-                    }
+                badgesRaw.split(",").filter(Boolean).forEach((b) => {
+                    const icon = document.createElement("img");
+                    icon.className = "sb-badge-icon";
+                    icon.src = b.trim();
+                    icon.alt = "";
+                    badgesEl.appendChild(icon);
                 });
             }
 
