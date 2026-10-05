@@ -254,17 +254,7 @@
 
     <script id="rankings-data" type="application/json">{{rankings}}</script>
     <script>
-        window.addEventListener("load", () => {
-            /* ── BADGE ICON MAP ── */
-            const BADGE_ICON_URLS = {
-                "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
-                "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
-                "Rich Rich Club": "https://tako.id/images/badges/king.png",
-                "Charity": "https://tako.id/images/badges/charity.png",
-                "VTuber": "https://tako.id/images/badges/vtuber.png",
-                "Tako Team": "https://tako.id/images/badges/admin.png"
-            };
-
+        document.addEventListener("DOMContentLoaded", () => {
             /* ── PARTICLES ── */
             const fire = document.getElementById("fire");
             for (let i = 0; i < 18; i++) {
@@ -317,31 +307,28 @@
                 name.className = "flex-1 min-w-0 text-white font-semibold text-[1rem] truncate";
                 name.textContent = r.name;
 
-                /* BADGES */
+                /* BADGES — pakai badgeItems (full URL) jika ada, fallback ke badges string */
                 const badges = document.createElement("div");
                 badges.className = "flex items-center gap-1 shrink-0";
-                (r.badges || "").split(",").filter(Boolean).forEach((badgeName) => {
-                    const iconUrl = BADGE_ICON_URLS[badgeName];
-                    if (iconUrl) {
+                if (Array.isArray(r.badgeItems) && r.badgeItems.length > 0) {
+                    r.badgeItems.forEach((badge) => {
+                        if (!badge.url) return;
                         const icon = document.createElement("img");
                         icon.className = "rank-badge-icon";
-                        icon.src = iconUrl;
-                        icon.alt = badgeName;
-                        icon.title = badgeName;
-                        icon.onerror = () => {
-                            const tag = document.createElement("span");
-                            tag.className = "rank-badge-tag";
-                            tag.textContent = badgeName;
-                            icon.replaceWith(tag);
-                        };
+                        icon.src = badge.url;
+                        icon.alt = badge.title || "";
+                        icon.title = badge.title || "";
                         badges.appendChild(icon);
-                    } else {
-                        const tag = document.createElement("span");
-                        tag.className = "rank-badge-tag";
-                        tag.textContent = badgeName;
-                        badges.appendChild(tag);
-                    }
-                });
+                    });
+                } else {
+                    (r.badges || "").split(",").filter(Boolean).forEach((b) => {
+                        const icon = document.createElement("img");
+                        icon.className = "rank-badge-icon";
+                        icon.src = b.trim();
+                        icon.alt = "";
+                        badges.appendChild(icon);
+                    });
+                }
 
                 /* AMOUNT */
                 const amount = document.createElement("span");
