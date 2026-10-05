@@ -1,364 +1,300 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="preconnect" href="https://assets.tako.id">
-<link rel="dns-prefetch" href="//assets.tako.id">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-      html,
-      body {
-        overflow: hidden;
-        background: transparent;
-      }
 
-      /* BACK CARD */
-      .alert::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://assets.tako.id">
+  <link rel="dns-prefetch" href="//assets.tako.id">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    html,
+    body {
+      overflow: hidden;
+      background: transparent;
+    }
+
+    /* BACK CARD */
+    .alert::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
           transparent,
           #22d3ee,
           #60a5fa,
-          transparent
-        );
-      }
+          transparent);
+    }
 
-      /* ALERT */
-      .alert {
-        box-shadow:
-          0 8px 25px rgba(0, 0, 0, 0.45),
-          0 0 18px rgba(34, 211, 238, 0.12);
-      }
+    /* ALERT */
+    .alert {
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.45),
+        0 0 18px rgba(34, 211, 238, 0.12);
+    }
 
-      /* CYBER SHINE */
-      .alert::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 40%;
-        height: 100%;
-        background: linear-gradient(
-          120deg,
+    /* CYBER SHINE */
+    .alert::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(120deg,
           transparent,
           rgba(34, 211, 238, 0.28),
-          transparent
-        );
-        animation: shine 3s linear infinite;
-        pointer-events: none;
+          transparent);
+      animation: shine 3s linear infinite;
+      pointer-events: none;
+    }
+
+    /* LOGO FLOAT */
+    .logo-float {
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0% {
+        transform: translateY(0) rotate(0deg);
       }
 
-      /* LOGO FLOAT */
-      .logo-float {
-        animation: logoFloat 3s ease-in-out infinite;
+      25% {
+        transform: translateY(-3px) rotate(-2deg);
       }
 
-      @keyframes logoFloat {
-        0% {
-          transform: translateY(0) rotate(0deg);
-        }
-
-        25% {
-          transform: translateY(-3px) rotate(-2deg);
-        }
-
-        75% {
-          transform: translateY(-3px) rotate(2deg);
-        }
-
-        100% {
-          transform: translateY(0) rotate(0deg);
-        }
+      75% {
+        transform: translateY(-3px) rotate(2deg);
       }
 
-      /* MONEY GLOW */
-      .money-glow {
-        color: #facc15;
-        animation: moneyGlow 1.4s ease-in-out infinite alternate;
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    /* MONEY GLOW */
+    .money-glow {
+      color: #facc15;
+      animation: moneyGlow 1.4s ease-in-out infinite alternate;
+    }
+
+    @keyframes moneyGlow {
+      from {
+        text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
       }
 
-      @keyframes moneyGlow {
-        from {
-          text-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
-        }
+      to {
+        text-shadow:
+          0 0 12px rgba(250, 204, 21, 1),
+          0 0 22px rgba(250, 204, 21, 0.7);
+      }
+    }
 
-        to {
-          text-shadow:
-            0 0 12px rgba(250, 204, 21, 1),
-            0 0 22px rgba(250, 204, 21, 0.7);
-        }
+    /* CYBER PARTICLES */
+    .spark {
+      position: absolute;
+      bottom: 0;
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 0.9;
       }
 
-      /* CYBER PARTICLES */
-      .spark {
-        position: absolute;
-        bottom: 0;
-        width: 4px;
-        height: 4px;
-        border-radius: 999px;
-        background: radial-gradient(circle, #22d3ee, #3b82f6, transparent);
-        animation: rise linear infinite;
+      to {
+        transform: translateY(-140px) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    /* SHINE */
+    @keyframes shine {
+      from {
+        left: -100%;
       }
 
-      @keyframes rise {
-        from {
-          transform: translateY(0) scale(1);
-          opacity: 0.9;
-        }
+      to {
+        left: 130%;
+      }
+    }
 
-        to {
-          transform: translateY(-140px) scale(0.2);
-          opacity: 0;
-        }
+    /* SHOW */
+    @keyframes show {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
       }
 
-      /* SHINE */
-      @keyframes shine {
-        from {
-          left: -100%;
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
 
-        to {
-          left: 130%;
-        }
+    /* STICKER */
+    .sticker {
+      display: inline-block;
+      vertical-align: middle;
+      max-height: 36px;
+      width: auto;
+      margin: 4px;
+    }
+
+    /* AVATAR */
+    .avatar {
+      display: none;
+    }
+
+    /* BADGES */
+    #badges:empty {
+      display: none;
+    }
+
+    .badge-icon {
+      height: 1.25rem;
+      width: auto;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .badge-tag {
+      font-size: 0.7rem;
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      color: #67e8f9;
+      padding: 0.05rem 0.4rem;
+      border-radius: 4px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+
+    /* CANVAS DECOR */
+    .alert-wrapper>img {
+      filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.25)) drop-shadow(0 0 25px rgba(59, 130, 246, 0.15));
+      animation: decorFloat 4s ease-in-out infinite;
+    }
+
+    .alert-wrapper>img:last-of-type {
+      animation-delay: 2s;
+    }
+
+    @keyframes decorFloat {
+      0% {
+        transform: translateY(0px);
       }
 
-      /* SHOW */
-      @keyframes show {
-        from {
-          opacity: 0;
-          transform: translateY(20px) scale(0.95);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
+      50% {
+        transform: translateY(-4px);
       }
 
-      /* STICKER */
-      .sticker {
-        display: inline-block;
-        vertical-align: middle;
-        max-height: 36px;
-        width: auto;
-        margin: 4px;
+      100% {
+        transform: translateY(0px);
       }
+    }
+  </style>
+</head>
 
-      /* AVATAR */
-      .avatar[src=""],
-      .avatar[src="#"],
-      .avatar:not([src]) {
-        display: none;
-      }
+<body>
+  <div class="alert-wrapper relative inline-block w-[97%] pr-3 pb-3">
+    <!-- DECOR TOP LEFT -->
+    <img src="https://raw.githubusercontent.com/himang-dg/mypicture/main/bkbak.webp" alt=""
+      class="pointer-events-none absolute -top-2 -left-2 w-[150px] z-20 select-none" />
 
-      /* VERIFIED */
-      #verified-badge-false {
-        display: none;
-      }
+    <!-- DECOR BOTTOM RIGHT -->
+    <img src="https://raw.githubusercontent.com/himang-dg/mypicture/main/bkbbk.webp" alt=""
+      class="pointer-events-none absolute -bottom-2 w-[200px] z-20 select-none" style="right: 10px" />
+    <div
+      class="alert relative overflow-hidden flex items-center gap-6 pl-18 pr-8 py-5 rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg z-10">
+      <!-- PARTICLES -->
+      <div id="fire" class="absolute inset-0 overflow-visible pointer-events-none"></div>
+      <!-- LOGO -->
+      <div class="relative z-10 shrink-0">
+        <img src="https://raw.githubusercontent.com/himang-dg/mypicture/main/PRKxO2H.webp" class="w-[76px] logo-float"
+          alt="logo" />
+      </div>
 
-      /* BADGES */
-      #badges:empty {
-        display: none;
-      }
-
-      .badge-icon {
-        height: 1.25rem;
-        width: auto;
-        display: inline-block;
-        vertical-align: middle;
-      }
-
-      .badge-tag {
-        font-size: 0.7rem;
-        border: 1px solid rgba(34, 211, 238, 0.35);
-        color: #67e8f9;
-        padding: 0.05rem 0.4rem;
-        border-radius: 4px;
-        vertical-align: middle;
-        white-space: nowrap;
-      }
-
-
-      /* CANVAS DECOR */
-      .alert-wrapper > img {
-        filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.25))
-          drop-shadow(0 0 25px rgba(59, 130, 246, 0.15));
-        animation: decorFloat 4s ease-in-out infinite;
-      }
-
-      .alert-wrapper > img:last-of-type {
-        animation-delay: 2s;
-      }
-
-      @keyframes decorFloat {
-        0% {
-          transform: translateY(0px);
-        }
-
-        50% {
-          transform: translateY(-4px);
-        }
-
-        100% {
-          transform: translateY(0px);
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="alert-wrapper relative inline-block w-[97%] pr-3 pb-3">
-      <!-- DECOR TOP LEFT -->
-      <img
-        src="https://cdn.jsdelivr.net/gh/himangmyid/mypicture@main/bkbak.png"
-        alt=""
-        class="pointer-events-none absolute -top-2 -left-2 w-[150px] z-20 select-none"
-      />
-
-      <!-- DECOR BOTTOM RIGHT -->
-      <img
-        src="https://cdn.jsdelivr.net/gh/himangmyid/mypicture@main/bkbbk.png"
-        alt=""
-        class="pointer-events-none absolute -bottom-2 w-[200px] z-20 select-none"
-        style="right: 10px"
-      />
-      <div
-        class="alert relative overflow-hidden flex items-center gap-6 pl-18 pr-8 py-5 rounded-2xl bg-slate-900/90 border border-cyan-400/20 shadow-lg z-10"
-      >
-        <!-- PARTICLES -->
-        <div
-          id="fire"
-          class="absolute inset-0 overflow-visible pointer-events-none"
-        ></div>
-        <!-- LOGO -->
-        <div class="relative z-10 shrink-0">
-          <img
-            src="https://raw.githubusercontent.com/himangmyid/mypicture/main/PRKxO2H.png"
-            class="w-[76px] logo-float"
-            alt="logo"
-          />
+      <!-- CONTENT -->
+      <div class="relative z-10 flex flex-col min-w-0 ml-2">
+        <div id="message" class="text-white text-[1.70rem] leading-[1.35] break-words font-semibold tracking-wide">
+          {{message}}
         </div>
 
-        <!-- CONTENT -->
-        <div class="relative z-10 flex flex-col min-w-0 ml-2">
-          <div
-            id="message"
-            class="text-white text-[1.70rem] leading-[1.35] break-words font-semibold tracking-wide"
-          >
-            {{message}}
-          </div>
+        <div class="mt-2 flex flex-wrap items-center gap-2 text-[1.35rem] font-semibold text-white">
+          <span class="money-glow">{{formattedAmount}}</span>
 
-          <div
-            class="mt-2 flex flex-wrap items-center gap-2 text-[1.35rem] font-semibold text-white"
-          >
-            <span class="money-glow">{{formattedAmount}}</span>
+          <span class="text-cyan-200">dari</span>
 
-            <span class="text-cyan-200">dari</span>
-
-            <img
-              id="avatar"
-              src="{{gifterPicture}}"
-              class="avatar w-7 h-7 rounded-full object-cover border border-cyan-300/40"
-            />
+          <img id="avatar" src="{{gifterPicture}}"
+            class="avatar w-7 h-7 rounded-full object-cover border border-cyan-300/40" />
 
 
-            <span>{{gifterName}}</span>
+          <span>{{gifterName}}</span>
 
-            <img
-              id="verified-badge-{{isGifterVerified}}"
-              src="https://assets.tako.id/badges/validated-user.png"
-              class="w-5 h-5"
-              alt="verified"
-            />
 
-            <span id="badges" class="inline-flex items-center gap-1"></span>
-          </div>
+          <span id="badges" class="inline-flex items-center gap-1"></span>
         </div>
       </div>
     </div>
-    <script>
-      window.addEventListener("load", () => {
-        /* ── BADGE ICON MAP ── */
-        const BADGE_ICON_URLS = {
-          "Tako Verified Partner": "https://tako.id/images/badges/partnered-creator.png",
-          "Tako Verified Creator": "https://tako.id/images/badges/verified-creator.png",
-          "Rich Rich Club":       "https://tako.id/images/badges/king.png",
-          "Charity":              "https://tako.id/images/badges/charity.png",
-          "VTuber":               "https://tako.id/images/badges/vtuber.png",
-          "Tako Team":            "https://tako.id/images/badges/admin.png"
-        };
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      /* ── PARTICLES ── */
+      const fire = document.getElementById("fire");
+      for (let i = 0; i < 28; i++) {
+        const spark = document.createElement("div");
+        spark.className = "spark";
+        spark.style.left = Math.random() * 100 + "%";
+        spark.style.animationDuration = 2 + Math.random() * 2 + "s";
+        spark.style.animationDelay = Math.random() * 2 + "s";
+        fire.appendChild(spark);
+      }
 
-        /* ── PARTICLES ── */
-        const fire = document.getElementById("fire");
-        for (let i = 0; i < 28; i++) {
-          const spark = document.createElement("div");
-          spark.className = "spark";
-          spark.style.left = Math.random() * 100 + "%";
-          spark.style.animationDuration = 2 + Math.random() * 2 + "s";
-          spark.style.animationDelay = Math.random() * 2 + "s";
-          fire.appendChild(spark);
-        }
+      /* ── AVATAR ── */
+      const picture = "{{gifterPicture}}".trim();
+      const avatar = document.getElementById("avatar");
+      if (picture && !picture.includes("{{")) {
+        avatar.src = picture;
+        avatar.style.display = "inline-block";
+        avatar.onerror = () => { avatar.style.display = "none"; };
+      }
 
-        /* ── AVATAR ── */
-        const picture = "{{gifterPicture}}".trim();
-        const avatar = document.getElementById("avatar");
-        if (picture && !picture.includes("{{")) {
-          avatar.style.display = "";
-          avatar.onerror = () => { avatar.style.display = "none"; };
-        } else {
-          avatar.style.display = "none";
-        }
+      /* ── BADGES ── */
+      const badgesRaw = "{{gifterBadges}}".trim();
+      const badgeContainer = document.getElementById("badges");
+      if (badgesRaw && !badgesRaw.includes("{{")) {
+        badgesRaw.split(",").filter(Boolean).forEach((b) => {
+          const icon = document.createElement("img");
+          icon.className = "badge-icon";
+          icon.src = b.trim();
+          icon.alt = "";
+          badgeContainer.appendChild(icon);
+        });
+      }
 
-        /* ── BADGES ── */
-        const badgesRaw = "{{gifterBadges}}".trim();
-        const badgeContainer = document.getElementById("badges");
-        if (badgesRaw && !badgesRaw.includes("{{")) {
-          badgesRaw.split(",").filter(Boolean).forEach((name) => {
-            const iconUrl = BADGE_ICON_URLS[name];
-            if (iconUrl) {
-              const icon = document.createElement("img");
-              icon.className = "badge-icon";
-              icon.src = iconUrl;
-              icon.alt = name;
-              icon.title = name;
-              icon.onerror = () => {
-                const tag = document.createElement("span");
-                tag.className = "badge-tag";
-                tag.textContent = name;
-                icon.replaceWith(tag);
-              };
-              badgeContainer.appendChild(icon);
-            } else {
-              const tag = document.createElement("span");
-              tag.className = "badge-tag";
-              tag.textContent = name;
-              badgeContainer.appendChild(tag);
-            }
-          });
-        }
+      /* ── MESSAGE ── */
+      const message = document.getElementById("message");
+      const raw = (message.textContent || "").trim();
+      if (!raw || raw.includes("{{")) {
+        message.style.display = "none";
+      } else {
+        /* ── STICKERS ── */
+        message.innerHTML = raw.replace(
+          /\[([a-zA-Z0-9_]+)\]/g,
+          (match, name) =>
+            `<img src="https://assets.tako.id/stickers/${name}.png" class="sticker" alt="${name}" onerror="this.outerHTML='[${name}]'">`
+        );
+      }
+    });
+  </script>
+</body>
 
-        /* ── MESSAGE ── */
-        const message = document.getElementById("message");
-        const raw = (message.textContent || "").trim();
-        if (!raw || raw.includes("{{")) {
-          message.style.display = "none";
-        } else {
-          /* ── STICKERS ── */
-          message.innerHTML = raw.replace(
-            /\[([a-zA-Z0-9_]+)\]/g,
-            (match, name) =>
-              `<img src="https://assets.tako.id/stickers/${name}.png" class="sticker" alt="${name}" onerror="this.outerHTML='[${name}]'">`
-          );
-        }
-      });
-    </script>
-  </body>
 </html>
